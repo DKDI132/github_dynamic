@@ -1,5 +1,6 @@
 # Ignoruj pliki testowe i scratchpady
 test.py
+fetch_test.py
 README.md
 README_template.md
 
