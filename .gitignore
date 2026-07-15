@@ -1,0 +1,23 @@
+# Ignoruj pliki testowe i scratchpady
+test.py
+README.md
+README_template.md
+
+# Wirtualne środowisko Pythona
+.venv/
+venv/
+ENV/
+
+# Pliki konfiguracyjne IDE
+.idea/
+.vscode/
+
+# Pliki środowiskowe z sekretami
+.env
+
+# Pliki tymczasowe Pythona
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
