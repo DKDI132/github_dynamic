@@ -31,6 +31,8 @@ def znajdz_zmiany(repa):
     active_repos = []
 
     for repo in repa:
+        if repo["name"]==GITHUB_USERNAME:
+            continue
         pushed_at_str = repo["pushed_at"].replace("Z", "+00:00")
         pushed_at = datetime.fromisoformat(pushed_at_str)
 
@@ -151,7 +153,7 @@ def log_table_set(odp,zmiany):
         lista[i] = lista[i].split("|")
         for key in projekty.keys():
             if key.lower()==lista[i][1].strip().strip("**").lower():
-                aktualna_data = date.today()
+                aktualna_data = date.today().strftime("%d %b. %Y")
                 lista[i][3]=" "+str(aktualna_data)+" "
                 projekty[key]=1
     for i in range(len(lista)):
