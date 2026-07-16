@@ -46,7 +46,14 @@ def znajdz_zmiany(repa):
         commit_params = {"since": since_time_iso}
 
         commits_response = requests.get(commits_url, headers=headers, params=commit_params)
-        commits = commits_response.json()
+        if commits_response.status_code != 200:
+            print(f"Błąd API GitHub (status {commits_response.status_code}) dla repo {repo_name}: {commits_response.text}")
+            continue
+        try:
+            commits = commits_response.json()
+        except Exception as e:
+            print(f"Błąd dekodowania JSON dla repo {repo_name}: {e}. Otrzymano: {commits_response.text}")
+            continue
 
         if not isinstance(commits, list) or len(commits) == 0:
             print(f"Brak nowych commitów w repo {repo_name} z ostatnich 24h.")
@@ -98,7 +105,14 @@ def repa():
     }
 
     repos_response = requests.get(repos_url, headers=headers, params=params)
-    repos = repos_response.json()
+    if repos_response.status_code != 200:
+        print(f"Błąd API GitHub (status {repos_response.status_code}) przy pobieraniu repozytoriów: {repos_response.text}")
+        return {}
+    try:
+        repos = repos_response.json()
+    except Exception as e:
+        print(f"Błąd dekodowania JSON przy pobieraniu repozytoriów: {e}. Otrzymano: {repos_response.text}")
+        return {}
     return znajdz_zmiany(repos)
 
 def ai(repa):
@@ -212,6 +226,8 @@ def zmiana(token:str=Header()):
     zmieniony = log_table_set(stan_aktualny, zmiany)
 
     tekst_changelog = ai(zmiany)
+    if tekst_changelog:
+        tekst_changelog = tekst_changelog.replace("\n", "\n\n")
     match = re.search(r"<!-- AUTO_CHANGELOG_START -->([\s\S]*?)<!-- AUTO_CHANGELOG_END -->", zmieniony)
     if match:
         zmieniony = zmieniony.replace(match.group(1), f"\n\n{tekst_changelog}\n\n")
