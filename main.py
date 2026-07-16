@@ -57,22 +57,30 @@ def znajdz_zmiany(repa):
         najstarszy = commits[-1]
 
         if len(najstarszy["parents"]) == 0:
-            compare_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/commits/{najnowszy}"
+            initial_sha = najstarszy["sha"]
+            commit_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/commits/{initial_sha}"
+            commit_response = requests.get(commit_url, headers=diff_headers)
+            diff_initial = commit_response.text if commit_response.status_code == 200 else ""
+
+            if najnowszy != initial_sha:
+                compare_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/compare/{initial_sha}...{najnowszy}"
+                compare_response = requests.get(compare_url, headers=diff_headers)
+                diff_rest = compare_response.text if compare_response.status_code == 200 else ""
+                raw_diff = diff_initial + "\n" + diff_rest
+            else:
+                raw_diff = diff_initial
         else:
             stary = f"{najstarszy['sha']}~1"
             compare_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/compare/{stary}...{najnowszy}"
+            compare_response = requests.get(compare_url, headers=diff_headers)
+            diff_rest = compare_response.text if compare_response.status_code == 200 else ""
+            raw_diff=diff_rest
 
-        compare_response =requests.get(compare_url, headers=diff_headers)
+        all_diffs[repo_name]={
+            "diff":raw_diff,
+            "language":repo.get("language") or "Python"
+        }
 
-        if compare_response.status_code == 200:
-            raw_diff = compare_response.text
-            all_diffs[repo_name]={
-                "diff":raw_diff,
-                "language":repo.get("language") or "Python"
-            }
-
-        else:
-            print(f"Nie udało się pobrać zmian dla {repo_name}. Status: {compare_response.status_code}")
     return all_diffs
 
 
