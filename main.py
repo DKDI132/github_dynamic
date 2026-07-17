@@ -123,7 +123,7 @@ def ai(repa):
         Napisz krótkie (maksymalnie 3-4 punkty) podsumowanie dzisiejszej pracy w formacie listy Markdown odnoszac sie do kazdego projektu z osobna.
         Użyj pasujących ikon emoji do każdego punktu.
         Pisz w pierwszej osobie liczby pojedynczej (np. "Naprawiłem...", "Dodałem...").
-        Zwróć TYLKO te punkty listy (czysty markdown bez dodatkowego komentarza i bez znaczników ```).
+        Zwróć TYLKO te punkty listy (czysty markdown bez dodatkowego komentarza i bez znaczników po kazdym punkcie \n ```).
         """
     try:
         response = client.models.generate_content(
@@ -226,6 +226,8 @@ def zmiana(token:str=Header()):
     zmieniony = log_table_set(stan_aktualny, zmiany)
 
     tekst_changelog = ai(zmiany)
+    if tekst_changelog:
+        tekst_changelog = tekst_changelog.replace("\n", "  \n")
     match = re.search(r"<!-- AUTO_CHANGELOG_START -->([\s\S]*?)<!-- AUTO_CHANGELOG_END -->", zmieniony)
     if match:
         zmieniony = zmieniony.replace(match.group(1), f"\n\n{tekst_changelog}\n\n")
