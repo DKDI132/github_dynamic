@@ -226,8 +226,6 @@ def zmiana(token:str=Header()):
     zmieniony = log_table_set(stan_aktualny, zmiany)
 
     tekst_changelog = ai(zmiany)
-    if tekst_changelog:
-        tekst_changelog = tekst_changelog.replace("\n", "\n\n")
     match = re.search(r"<!-- AUTO_CHANGELOG_START -->([\s\S]*?)<!-- AUTO_CHANGELOG_END -->", zmieniony)
     if match:
         zmieniony = zmieniony.replace(match.group(1), f"\n\n{tekst_changelog}\n\n")
