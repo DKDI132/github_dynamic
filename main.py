@@ -7,6 +7,7 @@ import re
 from datetime import date
 from dotenv import load_dotenv
 
+
 load_dotenv(dotenv_path='.env.readme')
 
 
@@ -175,15 +176,22 @@ def log_table_set(odp,zmiany):
             lista[i] = "|".join(lista[i])
 
     for key in projekty.keys():
+        dzisiejsza_data = date.today().strftime("%d %b. %Y")
+        start_tag = f"<!-- PROJECT_{key}_START -->"
+        end_tag = f"<!-- PROJECT_{key}_END -->"
+        if projekty[key] == 1:
+            match = re.search(rf"{start_tag}([\s\S]*?){end_tag}",odp, flags=re.DOTALL)
+            if match:
+                srodek_tekstu = match.group(1)
+                updated_text = re.sub(r"(Last update:\s*).*", rf"\g<1>{dzisiejsza_data}", srodek_tekstu)
+                odp = odp.replace(srodek_tekstu, updated_text)
         if projekty[key] == 0:
-            dzisiejsza_data = date.today().strftime("%d %b. %Y")
             lang = zmiany[key]["language"]
 
             nowy_wiersz = f"| **{key}** | {lang} | {dzisiejsza_data} | 🔴 Offline |"
             lista.append(nowy_wiersz)
 
-            start_tag = f"<!-- PROJECT_{key}_START -->"
-            end_tag = f"<!-- PROJECT_{key}_END -->"
+
             nowy_szablon = f"""{start_tag}
 ### 📦 {key}
 **{lang}**
