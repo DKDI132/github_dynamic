@@ -28,7 +28,7 @@ def poprawny():
 
 
 def znajdz_zmiany(repa):
-    since_time = datetime.now(timezone.utc) - timedelta(hours=24)
+    since_time = datetime.now(timezone.utc) - timedelta(hours=168)
     active_repos = []
 
     for repo in repa:
@@ -57,7 +57,6 @@ def znajdz_zmiany(repa):
             continue
 
         if not isinstance(commits, list) or len(commits) == 0:
-            print(f"Brak nowych commitów w repo {repo_name} z ostatnich 24h.")
             continue
         diff_headers = {
             **headers,
