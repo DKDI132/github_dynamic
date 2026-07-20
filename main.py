@@ -120,8 +120,10 @@ def ai(repa):
         Na podstawie poniższych zmian z GitHuba z ostatnich 24h:
         {repa}
 
-        Napisz krótkie (maksymalnie 3-4 punkty) podsumowanie dzisiejszej pracy w formacie listy Markdown odnoszac sie do kazdego projektu z osobna.
+        Napisz krótkie (maksymalnie 3-4 punkty) podsumowanie pracy tego tygodnia w formacie listy Markdown odnoszac sie do kazdego projektu z osobna.
         Użyj pasujących ikon emoji do każdego punktu.
+        struktura : (emoji) nazwa_projektu(do ktorego sie teraz odnosisz) (opis najwazniejszych zmian)
+        kilka punktow moze odnosic sie do jednego projektu
         Pisz w pierwszej osobie liczby pojedynczej (np. "Naprawiłem...", "Dodałem...").
         Zwróć TYLKO te punkty listy (czysty markdown bez dodatkowego komentarza i bez znaczników po kazdym punkcie \n ```).
         """
