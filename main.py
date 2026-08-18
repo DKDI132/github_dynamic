@@ -6,6 +6,7 @@ from google import genai
 import re
 from datetime import date
 from dotenv import load_dotenv
+import hmac
 
 
 load_dotenv(dotenv_path='.env.readme')
@@ -221,7 +222,7 @@ Last update: {dzisiejsza_data}
 
 @app.get("/zmiana")
 def zmiana(token:str=Header()):
-    if not token or token != poprawny():
+    if not token or not hmac.compare_digest(token, poprawny()):
         raise HTTPException(status_code=401,detail={"status":"error","message":"zostaw moj serwer prosze :C"})
     zmiany = repa()
     stan_aktualny = pobierz_szablon_readme()
