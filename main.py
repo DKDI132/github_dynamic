@@ -227,7 +227,7 @@ def zmiana(token:str=Header()):
     zmiany = repa()
     stan_aktualny = pobierz_szablon_readme()
     if not zmiany:
-        no_activity_status = "*🤖 Status: Brak nowych commitów w ciągu ostatnich 7 dni. Czas na odpoczynek!* ☕"
+        no_activity_status = "*🤖 Status: Brak nowych (publicznych) commitów w ciągu ostatnich 7 dni. Czas na odpoczynek!* ☕"
         match = re.search(r"<!-- AUTO_CHANGELOG_START -->([\s\S]*?)<!-- AUTO_CHANGELOG_END -->", stan_aktualny)
         if match:
             stan_aktualny = stan_aktualny.replace(match.group(1), f"\n{no_activity_status}\n")
